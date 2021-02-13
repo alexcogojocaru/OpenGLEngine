@@ -3,7 +3,16 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-# Add source to this project's executable.
-add_executable (OpenGLEngine "OpenGLEngine.cpp" "OpenGLEngine.h")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# TODO: Add tests and install targets if needed.
+# Add source to this project's executable.
+add_executable (
+	OpenGLEngine 
+	"OpenGLEngine.cpp" 
+	 
+	"glad.c" 
+ "inc/Window.h" "src/Window.cpp")
+
+# Add targets 
+target_link_libraries (OpenGLEngine glfw)

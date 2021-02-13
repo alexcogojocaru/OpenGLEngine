@@ -1,12 +1,10 @@
-﻿// OpenGLEngine.cpp : Defines the entry point for the application.
-//
+﻿#include "Window.h"
 
-#include "OpenGLEngine.h"
-
-using namespace std;
+using namespace opengl::engine;
 
 int main()
 {
-	cout << "Hello CMake." << endl;
+	Window window(800, 600, "opengl window");
+
 	return 0;
 }

@@ -1,0 +1,5 @@
+out/
+glad_library/
+glfw/
+OpenGLEngine/glad.c
+.vs/
