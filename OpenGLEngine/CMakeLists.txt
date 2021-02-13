@@ -10,9 +10,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_executable (
 	OpenGLEngine 
 	"OpenGLEngine.cpp" 
-	 
 	"glad.c" 
- "inc/Window.h" "src/Window.cpp")
+	"inc/Window.h" 
+	"src/Window.cpp"
+)
 
 # Add targets 
 target_link_libraries (OpenGLEngine glfw)
