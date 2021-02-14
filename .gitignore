@@ -2,7 +2,7 @@ out/
 glad_library/
 glfw/
 glm/
-OpenGLEngine/glad.c
-OpenGLEngine/stb_image.h
-OpenGLEngine/stb_image.cpp
+OpenGLEngine/src/glad.c
+OpenGLEngine/inc/stb_image.h
+OpenGLEngine/src/stb_image.cpp
 .vs/

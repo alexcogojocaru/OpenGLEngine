@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Window.h"
-#include "../stb_image.h"
 #include "Log.h"
 
 namespace opengl
@@ -16,16 +15,14 @@ namespace opengl
 			m_glfwWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
 			if (!m_glfwWindow)
 			{
-				std::cerr << "Failed to create glfw window" << std::endl;
+				LOG_ERROR("Failed to create glfw window");
+			}
+			else
+			{
+				LOG_TRACE("glfw window created successfully");
 			}
 
 			glfwMakeContextCurrent(m_glfwWindow);
-
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-			{
-				std::cerr << "Failed to initialize glad" << std::endl;
-			}
-
 			glfwSetFramebufferSizeCallback(m_glfwWindow, framebuffer_size_callback);
 		}
 

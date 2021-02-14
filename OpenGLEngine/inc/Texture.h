@@ -10,18 +10,22 @@ namespace opengl
 	namespace engine
 	{
 		class Renderer;
+		class Shader;
 
 		class Texture
 		{
 		private:
-			uint32_t m_glfwTexture;
+			uint32_t m_glfwTextureFace;
+			uint32_t m_glfwTextureWood;
+
+			Shader* m_shader = nullptr;
 
 			friend class Renderer;
 		public:
 			Texture();
 
 		private:
-			void createTexture();
+			void createTexture(Shader* shader);
 		};
 	} // namespace engine
 } // namespace opengl
