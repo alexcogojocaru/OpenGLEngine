@@ -1,10 +1,12 @@
-﻿#include "Window.h"
+﻿#include "Renderer.h"
 
 using namespace opengl::engine;
 
 int main()
 {
-	Window window(800, 600, "opengl window");
+	Renderer* engine = Renderer::getRenderer();
+
+	engine->startEngine();
 
 	return 0;
 }

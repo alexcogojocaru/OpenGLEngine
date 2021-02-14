@@ -21,7 +21,7 @@ add_executable (
 	"inc/Renderer.h" 
 	"src/Renderer.cpp" 
 	"inc/graphics.h"
-)
+ "inc/Texture.h" "src/Texture.cpp")
 
 # Add targets 
 target_link_libraries (OpenGLEngine glfw)

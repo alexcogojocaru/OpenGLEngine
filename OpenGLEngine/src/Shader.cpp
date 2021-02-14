@@ -5,6 +5,10 @@ namespace opengl
 {
 	namespace engine
 	{
+		Shader::Shader()
+		{
+		}
+
 		Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		{
 			uint32_t vertex;

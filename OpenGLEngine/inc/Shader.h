@@ -19,6 +19,7 @@ namespace opengl
 			uint32_t m_programID;
 
 		public:
+			Shader();
 			Shader(const char* vertexPath, const char* fragmentPath);
 
 			void useProgram();
