@@ -1,19 +1,28 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
+#include <vector>
+#include <thread>
+
 #include "Window.h"
 #include "Shader.h"
 #include "Texture.h"
 
 //#define WIREFRAME_MODE
-#define POINT_COORDS 2 // 2 because we have (x, y) coords
+
+//#define DRAW_ELEMENTS
+#define DRAW_ARRAY
+
+#define MODEL_MATRIX "u_model"
+#define VIEW_MATRIX "u_view"
+#define PROJECTION_MATRIX "u_projection"
 
 namespace opengl
 {
 	namespace engine
 	{
-		constexpr auto windowWidth = 1280;
-		constexpr auto windowHeight = 720;
+		constexpr auto windowWidth = 800;
+		constexpr auto windowHeight = 600;
 		constexpr auto windowTitle = "OpenGL Engine";
 
 		constexpr auto vertexpath = "D:\\Engine\\OpenGLEngine\\OpenGLEngine\\res\\shaders\\vertex.vert";
@@ -22,13 +31,15 @@ namespace opengl
 		class Renderer
 		{
 		private:
-			static Renderer* engineInstance;
-			static float positions[];
-			static uint32_t indices[];
+			static std::shared_ptr<Renderer> engineInstance;
+			static std::vector<float> positions;
+			static std::vector<uint32_t> indices;
+
+			Texture* m_texture1;
+			Texture* m_texture2;
 
 			Window m_window;
-			Shader* m_shader = nullptr;
-			Texture m_texture;
+			std::shared_ptr<Shader> m_shader = nullptr;
 
 			uint32_t m_vertex_array_object;
 			uint32_t m_vertex_buffer_object;
@@ -36,13 +47,16 @@ namespace opengl
 
 		private:
 			Renderer();
+		
+			void createBuffers();
+			static void startEngineCallback(Renderer* renderer);
+
+		public:
 			~Renderer();
 
-			void createBuffers();
-		
-		public:
-			static Renderer* getRenderer();
+			static std::shared_ptr<Renderer> getRenderer();
 
+			void run();
 			void startEngine();
 		};
 

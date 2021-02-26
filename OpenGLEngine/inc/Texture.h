@@ -2,6 +2,7 @@
 #define __TEXTURE_H__
 
 #include <stdint.h>
+#include <string>
 
 #include "graphics.h"
 
@@ -10,22 +11,26 @@ namespace opengl
 	namespace engine
 	{
 		class Renderer;
-		class Shader;
 
 		class Texture
 		{
 		private:
-			uint32_t m_glfwTextureFace;
-			uint32_t m_glfwTextureWood;
-
-			Shader* m_shader = nullptr;
+			uint32_t m_glfwTexture;
+			int32_t m_width;
+			int32_t m_height;
+			int32_t m_channels;
 
 			friend class Renderer;
+
 		public:
 			Texture();
+			Texture(const std::string& path);
+			
+			~Texture();
 
-		private:
-			void createTexture(Shader* shader);
+			void activateTexture(uint32_t slot);
+
+			int32_t get() { return m_channels; }
 		};
 	} // namespace engine
 } // namespace opengl

@@ -4,9 +4,9 @@ using namespace opengl::engine;
 
 int main()
 {
-	Renderer* engine = Renderer::getRenderer();
+	std::shared_ptr<Renderer> engine(Renderer::getRenderer());
 
-	engine->startEngine();
+	engine->run();
 
 	return 0;
 }
