@@ -45,6 +45,11 @@ namespace opengl
 				glUniform1f(glGetUniformLocation(m_programID, name.c_str()), value);
 			}
 
+			void setVec3(const std::string& name, glm::vec3& value) const
+			{
+				glUniform3f(glGetUniformLocation(m_programID, name.c_str()), value.x, value.y, value.z);
+			}
+
 			void setMatrix4x4(const std::string& name, glm::mat4& value) const
 			{
 				glUniformMatrix4fv(glGetUniformLocation(m_programID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));

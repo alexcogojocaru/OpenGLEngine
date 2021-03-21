@@ -7,73 +7,10 @@ namespace opengl
 {
 	namespace engine
 	{
-		PyramidMesh pyramid;
-
 		std::shared_ptr<Renderer> Renderer::engineInstance = nullptr;
 
-		//std::vector<float> Renderer::positions = {
-		//	 0.5f,  0.5f, 0.0f,  
-		//	 0.5f, -0.5f, 0.0f,  
-		//	-0.5f, -0.5f, 0.0f,  
-		//	-0.5f,  0.5f, 0.0f   
-		//};
-
-		std::vector<float> Renderer::positions = {
-			  
-
-		/*-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f, 
-		 0.5f,  0.5f, -0.5f, 
-		 0.5f,  0.5f, -0.5f, 
-		-0.5f,  0.5f, -0.5f, 
-		-0.5f, -0.5f, -0.5f, 
-
-		-0.5f, -0.5f,  0.5f, 
-		 0.5f, -0.5f,  0.5f, 
-		 0.5f,  0.5f,  0.5f, 
-		 0.5f,  0.5f,  0.5f, 
-		-0.5f,  0.5f,  0.5f, 
-		-0.5f, -0.5f,  0.5f, 
-
-		-0.5f,  0.5f,  0.5f, 
-		-0.5f,  0.5f, -0.5f, 
-		-0.5f, -0.5f, -0.5f, 
-		-0.5f, -0.5f, -0.5f, 
-		-0.5f, -0.5f,  0.5f, 
-		-0.5f,  0.5f,  0.5f, 
-
-		 0.5f,  0.5f,  0.5f, 
-		 0.5f,  0.5f, -0.5f, 
-		 0.5f, -0.5f, -0.5f, 
-		 0.5f, -0.5f, -0.5f, 
-		 0.5f, -0.5f,  0.5f, 
-		 0.5f,  0.5f,  0.5f, 
-
-		-0.5f, -0.5f, -0.5f, 
-		 0.5f, -0.5f, -0.5f, 
-		 0.5f, -0.5f,  0.5f, 
-		 0.5f, -0.5f,  0.5f, 
-		-0.5f, -0.5f,  0.5f, 
-		-0.5f, -0.5f, -0.5f, 
-
-		-0.5f,  0.5f, -0.5f, 
-		 0.5f,  0.5f, -0.5f, 
-		 0.5f,  0.5f,  0.5f, 
-		 0.5f,  0.5f,  0.5f, 
-		-0.5f,  0.5f,  0.5f, 
-		-0.5f,  0.5f, -0.5f*/
-		};
-
-		std::vector<uint32_t> Renderer::indices = {
-			0, 1, 2, // first base
-			0, 2, 3, // second base,
-			0, 1, 4, // first face
-			1, 2, 4, // second face
-			2, 3, 4, // third face
-			3, 0, 4  // fourth face
-		};
-
 		Renderer::Renderer()
+			: m_shape(nullptr)
 		{
 			LOG_TRACE("render engine started");
 
@@ -93,6 +30,8 @@ namespace opengl
 			glEnable(GL_DEPTH_TEST);
 
 			m_shader = std::make_shared<Shader>(vertexpath, fragmentpath);
+			m_lightShader = std::make_shared<Shader>(vertexpath, lightFragmentPath);
+			m_camera = std::make_shared<Camera>(windowWidth, windowHeight);
 
 			m_shader->useProgram();
 
@@ -108,8 +47,6 @@ namespace opengl
 #ifdef WIREFRAME_MODE
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #endif
-
-			createBuffers();
 		}
 
 		Renderer::~Renderer()
@@ -139,36 +76,35 @@ namespace opengl
 			glBindVertexArray(m_vertex_array_object);
 
 			glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer_object);
-			glBufferData(GL_ARRAY_BUFFER, pyramid.points.size() * sizeof(glm::vec3), pyramid.points.data(), GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, m_shape->points.size() * sizeof(glm::vec3), m_shape->points.data(), GL_STATIC_DRAW);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer_object);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, pyramid.indices.size() * sizeof(glm::ivec3), pyramid.indices.data(), GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_shape->indices.size() * sizeof(glm::ivec3), m_shape->indices.data(), GL_STATIC_DRAW);
 
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 			glEnableVertexAttribArray(0);
 
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindVertexArray(0);
+			glGenVertexArrays(1, &m_lightCubeVAO);
+			glBindVertexArray(m_lightCubeVAO);
+
+			glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer_object);
+
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(0);
 		}
 
 		void Renderer::run()
 		{
-			glm::mat4 model = glm::mat4(1.0f);
-			glm::mat4 rotation = glm::mat4(1.0f);
-			glm::mat4 view = glm::mat4(1.0f);
-			glm::mat4 projection = glm::mat4(1.0f);
+			if (m_shape == nullptr)
+			{
+				LOG_EXCEPTION("Shape mesh is not initialized");
+				return;
+			}
 
-			m_shader->useProgram();
+			createBuffers();
 
-			//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-			model = glm::rotate(model, glm::radians(22.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-			
-			view = glm::translate(view, glm::vec3(0.0f, -0.5f, 0.0f));
-			//projection = glm::perspective(glm::radians(-75.0f), static_cast<float>(windowWidth / windowHeight), 0.1f, 100.0f);
-
-			m_shader->setMatrix4x4("model", model);
-			m_shader->setMatrix4x4("view", view);
-			m_shader->setMatrix4x4("projection", projection);
+			m_shader->setMatrix4x4("view", m_camera->getView());
+			m_shader->setMatrix4x4("projection", m_camera->getProjection());
 
 			while (!glfwWindowShouldClose(m_window.m_glfwWindow))
 			{
@@ -177,15 +113,36 @@ namespace opengl
 				glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+				m_shader->useProgram();
+				m_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+				m_shader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+				glm::mat4 model = glm::mat4(1.0f);
+
+				model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+				model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+				m_shader->setMatrix4x4("model", model);
+
 				glBindVertexArray(m_vertex_array_object);
-				
+
+				{
 				#if defined(DRAW_ELEMENTS)
-					glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+					glDrawElements(GL_TRIANGLES, m_shape->indices.size() * 3, GL_UNSIGNED_INT, 0);
 				#elif defined(DRAW_ARRAY)
 					glDrawArrays(GL_TRIANGLES, 0, positions.size());
 				#endif
-				
-					glfwSwapBuffers(m_window.m_glfwWindow);
+				}
+
+				/*m_lightShader->useProgram();
+				m_lightShader->setMatrix4x4("projection", m_camera->getProjection());
+				m_lightShader->setMatrix4x4("view", m_camera->getView());
+				model = glm::translate(model, lightPos);
+				m_lightShader->setMatrix4x4("model", model);
+
+				glBindVertexArray(m_lightCubeVAO);
+				glDrawElements(GL_TRIANGLES, m_shape->indices.size() * 3, GL_UNSIGNED_INT, 0);*/
+
+				glfwSwapBuffers(m_window.m_glfwWindow);
 				glfwPollEvents();
 			}
 		}

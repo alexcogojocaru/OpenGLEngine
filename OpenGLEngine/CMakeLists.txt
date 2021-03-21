@@ -23,7 +23,11 @@ add_executable (
 	"inc/graphics.h"
 	"inc/Texture.h" 
 	"src/Texture.cpp" 
-	"inc/PyramidMesh.h")
+	"inc/Mesh.h"
+	"inc/PyramidMesh.h" 
+	"inc/meshes.h" 
+	"inc/Camera.h" 
+	"src/Camera.cpp")
 
 # Add targets 
 target_link_libraries (OpenGLEngine 

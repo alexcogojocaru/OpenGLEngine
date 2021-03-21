@@ -1,16 +1,17 @@
-#ifndef __PYRAMID_MESH__
-#define __PYRAMID_MESH__
+#ifndef __PYRAMID_MESH_H__
+#define __PYRAMID_MESH_H__
 
-#include <vector>
-#include "graphics.h"
+#include "Mesh.h"
 
-class PyramidMesh
+class PyramidMesh : public Mesh
 {
 public:
-	std::vector<glm::vec3> points;
-	std::vector<glm::ivec3> indices;
+	PyramidMesh() : Mesh()
+	{
+		initialize();
+	}
 
-	PyramidMesh()
+	void initialize() override
 	{
 		points.push_back(glm::vec3(0.5f, 0.0f, 0.5f));
 		points.push_back(glm::vec3(0.5f, 0.0f, -0.5f));
