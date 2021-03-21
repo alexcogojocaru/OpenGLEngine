@@ -8,7 +8,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
-//#define WIREFRAME_MODE
+#define WIREFRAME_MODE
 
 #define DRAW_ELEMENTS
 //#define DRAW_ARRAY
