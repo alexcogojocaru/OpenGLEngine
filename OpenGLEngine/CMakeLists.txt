@@ -4,8 +4,8 @@
 cmake_minimum_required (VERSION 3.8)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/res/shaders)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Add source to this project's executable.
 add_executable (
@@ -21,7 +21,10 @@ add_executable (
 	"inc/Renderer.h" 
 	"src/Renderer.cpp" 
 	"inc/graphics.h"
- "inc/Texture.h" "src/Texture.cpp")
+	"inc/Texture.h" 
+	"src/Texture.cpp")
 
 # Add targets 
-target_link_libraries (OpenGLEngine glfw)
+target_link_libraries (OpenGLEngine 
+	glfw 
+)

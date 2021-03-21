@@ -17,6 +17,7 @@ namespace opengl
 			GLFWwindow* m_glfwWindow = nullptr;
 
 			friend class Renderer;
+			bool singleInput = true;
 
 		public:
 			Window();

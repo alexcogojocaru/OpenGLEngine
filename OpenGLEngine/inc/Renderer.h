@@ -49,7 +49,6 @@ namespace opengl
 			Renderer();
 		
 			void createBuffers();
-			static void startEngineCallback(Renderer* renderer);
 
 		public:
 			~Renderer();

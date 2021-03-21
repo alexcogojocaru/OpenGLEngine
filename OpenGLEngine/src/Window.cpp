@@ -32,6 +32,11 @@ namespace opengl
 			{
 				glfwSetWindowShouldClose(m_glfwWindow, true);
 			}
+
+			if (glfwGetKey(m_glfwWindow, GLFW_KEY_LEFT) == GLFW_PRESS)
+			{
+				LOG_TRACE("Key pressed");
+			}
 		}
 
 		void Window::framebuffer_size_callback(GLFWwindow* win, int width, int height)

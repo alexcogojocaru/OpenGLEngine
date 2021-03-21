@@ -1,67 +1,70 @@
 #include <vector>
 #include "Renderer.h"
 #include "Log.h"
+#include "PyramidMesh.h"
 
 namespace opengl
 {
 	namespace engine
 	{
+		PyramidMesh pyramid;
+
 		std::shared_ptr<Renderer> Renderer::engineInstance = nullptr;
 
-		/*float Renderer::positions[] = {
-			  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			   0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			   0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-			  -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
-		};*/
+		//std::vector<float> Renderer::positions = {
+		//	 0.5f,  0.5f, 0.0f,  
+		//	 0.5f, -0.5f, 0.0f,  
+		//	-0.5f, -0.5f, 0.0f,  
+		//	-0.5f,  0.5f, 0.0f   
+		//};
 
 		std::vector<float> Renderer::positions = {
-			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-			 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f, 
+		 0.5f,  0.5f, -0.5f, 
+		 0.5f,  0.5f, -0.5f, 
+		-0.5f,  0.5f, -0.5f, 
+		-0.5f, -0.5f, -0.5f, 
 
-			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f, 
+		 0.5f, -0.5f,  0.5f, 
+		 0.5f,  0.5f,  0.5f, 
+		 0.5f,  0.5f,  0.5f, 
+		-0.5f,  0.5f,  0.5f, 
+		-0.5f, -0.5f,  0.5f, 
 
-			-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 
+		-0.5f,  0.5f, -0.5f, 
+		-0.5f, -0.5f, -0.5f, 
+		-0.5f, -0.5f, -0.5f, 
+		-0.5f, -0.5f,  0.5f, 
+		-0.5f,  0.5f,  0.5f, 
 
-			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-			 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-			 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-			 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 
+		 0.5f,  0.5f, -0.5f, 
+		 0.5f, -0.5f, -0.5f, 
+		 0.5f, -0.5f, -0.5f, 
+		 0.5f, -0.5f,  0.5f, 
+		 0.5f,  0.5f,  0.5f, 
 
-			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-			 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 
+		 0.5f, -0.5f, -0.5f, 
+		 0.5f, -0.5f,  0.5f, 
+		 0.5f, -0.5f,  0.5f, 
+		-0.5f, -0.5f,  0.5f, 
+		-0.5f, -0.5f, -0.5f, 
 
-			-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		-0.5f,  0.5f, -0.5f, 
+		 0.5f,  0.5f, -0.5f, 
+		 0.5f,  0.5f,  0.5f, 
+		 0.5f,  0.5f,  0.5f, 
+		-0.5f,  0.5f,  0.5f, 
+		-0.5f,  0.5f, -0.5f
 		};
 
 		std::vector<uint32_t> Renderer::indices = {
-			0, 1, 2,
-			0, 2, 3
+			0, 1, 3,  // first Triangle
+			1, 2, 3   // second Triangle
 		};
 
 		Renderer::Renderer()
@@ -90,11 +93,11 @@ namespace opengl
 			m_texture1 = new Texture("D:\\Engine\\OpenGLEngine\\OpenGLEngine\\res\\textures\\wooden_container.jpg");
 			m_texture2 = new Texture("D:\\Engine\\OpenGLEngine\\OpenGLEngine\\res\\textures\\awesomeface.png");
 
-			m_texture1->activateTexture(0);
-			m_texture2->activateTexture(1);
+			/*m_texture1->activateTexture(0);
+			m_texture2->activateTexture(1);*/
 
-			m_shader->setInt("u_texture1", 0);
-			m_shader->setInt("u_texture2", 1);
+			/*m_shader->setInt("u_texture1", 0);
+			m_shader->setInt("u_texture2", 1);*/
 
 #ifdef WIREFRAME_MODE
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -126,19 +129,17 @@ namespace opengl
 			glGenVertexArrays(1, &m_vertex_array_object);
 			glGenBuffers(1, &m_vertex_buffer_object);
 			glGenBuffers(1, &m_index_buffer_object);
+
 			glBindVertexArray(m_vertex_array_object);
 
 			glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer_object);
-			glBufferData(GL_ARRAY_BUFFER, positions.size(), positions.data(), GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer_object);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size(), indices.data(), GL_STATIC_DRAW);
+			/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer_object);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(float), indices.data(), GL_STATIC_DRAW);*/
 
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 			glEnableVertexAttribArray(0);
-
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-			glEnableVertexAttribArray(1);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
@@ -146,16 +147,22 @@ namespace opengl
 
 		void Renderer::run()
 		{
-			/*glm::vec3 camPos = glm::vec3(0.0f, 0.0f, 3.0f);
-			glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 cameraDirection = glm::normalize(camPos - cameraTarget);
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::mat4 rotation = glm::mat4(1.0f);
+			glm::mat4 view = glm::mat4(1.0f);
+			glm::mat4 projection = glm::mat4(1.0f);
 
-			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-			glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+			m_shader->useProgram();
 
-			glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);*/
+			//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+			model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+			
+			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+			//projection = glm::perspective(glm::radians(-75.0f), static_cast<float>(windowWidth / windowHeight), 0.1f, 100.0f);
 
-			std::cout << "RUN" << std::endl;
+			m_shader->setMatrix4x4("model", model);
+			m_shader->setMatrix4x4("view", view);
+			m_shader->setMatrix4x4("projection", projection);
 
 			while (!glfwWindowShouldClose(m_window.m_glfwWindow))
 			{
@@ -164,34 +171,15 @@ namespace opengl
 				glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-				m_shader->useProgram();
-
-				glm::mat4 model = glm::mat4(1.0f);
-				glm::mat4 view = glm::mat4(1.0f);
-				glm::mat4 projection = glm::mat4(1.0f);
-				glm::mat4 mvp = glm::mat4(1.0f);
-
-				model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-				model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-				model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-				model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-				model = glm::scale(model, glm::vec3(1.0f));
-
-				glm::vec3 worldUp = glm::vec3();
-
-				mvp = model * view * projection;
-
-				m_shader->setMatrix4x4("mvp", mvp);
-
 				glBindVertexArray(m_vertex_array_object);
-#ifdef DRAW_ELEMENTS
-				glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-#else
-#ifdef DRAW_ARRAY
-				glDrawArrays(GL_TRIANGLES, 0, positions.size());
-#endif
-#endif
-				glfwSwapBuffers(m_window.m_glfwWindow);
+				
+				#if defined(DRAW_ELEMENTS)
+					glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+				#elif defined(DRAW_ARRAY)
+					glDrawArrays(GL_TRIANGLES, 0, 36);
+				#endif
+				
+					glfwSwapBuffers(m_window.m_glfwWindow);
 				glfwPollEvents();
 			}
 		}
