@@ -19,7 +19,9 @@ namespace opengl
 		//};
 
 		std::vector<float> Renderer::positions = {
-		-0.5f, -0.5f, -0.5f,
+			  
+
+		/*-0.5f, -0.5f, -0.5f,
 		 0.5f, -0.5f, -0.5f, 
 		 0.5f,  0.5f, -0.5f, 
 		 0.5f,  0.5f, -0.5f, 
@@ -59,12 +61,16 @@ namespace opengl
 		 0.5f,  0.5f,  0.5f, 
 		 0.5f,  0.5f,  0.5f, 
 		-0.5f,  0.5f,  0.5f, 
-		-0.5f,  0.5f, -0.5f
+		-0.5f,  0.5f, -0.5f*/
 		};
 
 		std::vector<uint32_t> Renderer::indices = {
-			0, 1, 3,  // first Triangle
-			1, 2, 3   // second Triangle
+			0, 1, 2, // first base
+			0, 2, 3, // second base,
+			0, 1, 4, // first face
+			1, 2, 4, // second face
+			2, 3, 4, // third face
+			3, 0, 4  // fourth face
 		};
 
 		Renderer::Renderer()
@@ -133,10 +139,10 @@ namespace opengl
 			glBindVertexArray(m_vertex_array_object);
 
 			glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer_object);
-			glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), positions.data(), GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, pyramid.points.size() * sizeof(glm::vec3), pyramid.points.data(), GL_STATIC_DRAW);
 
-			/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer_object);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(float), indices.data(), GL_STATIC_DRAW);*/
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer_object);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, pyramid.indices.size() * sizeof(glm::ivec3), pyramid.indices.data(), GL_STATIC_DRAW);
 
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 			glEnableVertexAttribArray(0);
@@ -155,9 +161,9 @@ namespace opengl
 			m_shader->useProgram();
 
 			//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-			model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(22.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 			
-			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+			view = glm::translate(view, glm::vec3(0.0f, -0.5f, 0.0f));
 			//projection = glm::perspective(glm::radians(-75.0f), static_cast<float>(windowWidth / windowHeight), 0.1f, 100.0f);
 
 			m_shader->setMatrix4x4("model", model);
@@ -176,7 +182,7 @@ namespace opengl
 				#if defined(DRAW_ELEMENTS)
 					glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 				#elif defined(DRAW_ARRAY)
-					glDrawArrays(GL_TRIANGLES, 0, 36);
+					glDrawArrays(GL_TRIANGLES, 0, positions.size());
 				#endif
 				
 					glfwSwapBuffers(m_window.m_glfwWindow);

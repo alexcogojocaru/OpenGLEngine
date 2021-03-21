@@ -10,8 +10,8 @@
 
 //#define WIREFRAME_MODE
 
-//#define DRAW_ELEMENTS
-#define DRAW_ARRAY
+#define DRAW_ELEMENTS
+//#define DRAW_ARRAY
 
 #define MODEL_MATRIX "u_model"
 #define VIEW_MATRIX "u_view"

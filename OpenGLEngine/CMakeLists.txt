@@ -22,7 +22,8 @@ add_executable (
 	"src/Renderer.cpp" 
 	"inc/graphics.h"
 	"inc/Texture.h" 
-	"src/Texture.cpp")
+	"src/Texture.cpp" 
+	"inc/PyramidMesh.h")
 
 # Add targets 
 target_link_libraries (OpenGLEngine 
